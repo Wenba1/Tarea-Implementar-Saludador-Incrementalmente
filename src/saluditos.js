@@ -1,30 +1,45 @@
-export function saludar()
-{
-    return "Hola";
+// index.js
+
+// Función para traducir el saludo
+function traducirSaludo(saludo, idioma) {
+    const traducciones = {
+        "es": saludo,
+        "en": saludo.replace("Hola", "Hello").replace("eres", "you are").replace("y tienes", "and you are").replace("años", "years old"),
+        "fr": saludo.replace("Hola", "Bonjour").replace("eres", "tu es").replace("y tienes", "et tu as").replace("años", "ans")
+    };
+    return traducciones[idioma] || saludo;
 }
-export function saludar(nombre)
-{
-    return 'Hola, $(nombre)'
-}
-export function saludar(nombre, genero){
-    let saludo=genero =='masculino' ? 'Hola, Señor': 'Hola, Señora';
-    return '$(saludo) $(nombre)';
-}
-export function saludar(nombre, genero, edad){
-    let saludo= genero ==='masculino' ? 'señor': 'señora';
-    let edadSaludo= edad >50 ? "Mayor":"Joven";
-    return 'Hola, $(saludo) $(nombre), ${edadSaludo})';
-}
-export function saludar(nombre, genero, edad, idioma = 'es') {
-    let saludo = '';
-    if (idioma === 'es') {
-        saludo = genero === 'masculino' ? 'Señor' : 'Señora';
-    } else if (idioma === 'en') {
-        saludo = genero === 'masculino' ? 'Mr.' : 'Mrs.';
+
+// Función para saludar
+function saludar() {
+    const nombre = document.getElementById('nombre').value;
+    const genero = document.querySelector('input[name="genero"]:checked').value;
+    const edad = document.getElementById('edad').value;
+    const idioma = document.getElementById('idioma').value;
+
+    let saludo = `Hola ${nombre}`;
+    if (genero === "Masculino") {
+        saludo += `, eres un hombre`;
+    } else if (genero === "Femenino") {
+        saludo += `, eres una mujer`;
+    }
+    if (edad) {
+        saludo += ` y tienes ${edad} años.`;
     }
 
-    let edadSaludo = idioma === 'es' ? (edad > 50 ? "Mayor" : "Joven") : (edad > 50 ? "Senior" : "Young");
-    return idioma === 'es' 
-        ? `Hola, ${saludo} ${nombre}, ${edadSaludo}`
-        : `Hello, ${saludo} ${nombre}, ${edadSaludo}`;
+    // Traducir el saludo según el idioma seleccionado
+    saludo = traducirSaludo(saludo, idioma);
+
+    // Mostrar saludo en un cuadro de diálogo de confirmación
+    const confirmacion = window.confirm(saludo + "\n\n¿Es correcto este saludo?");
+
+    // Opcional: puedes hacer algo según la respuesta del usuario
+    if (confirmacion) {
+        alert("Saludo confirmado.");
+    } else {
+        alert("Saludo cancelado.");
+    }
 }
+
+// Event listener para el botón Saludar
+document.getElementById('saludarBtn').addEventListener('click', saludar);
